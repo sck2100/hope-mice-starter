@@ -52,6 +52,8 @@ h1 small{display:block;font-size:.56em;margin-top:2px}
 .alt{margin:-6px 0 0;font-family:var(--f-num);font-weight:600;font-size:15px;color:var(--ink-soft);letter-spacing:.02em}
 .sub{margin:0;color:var(--ink-soft);max-width:30ch}
 .credit{margin:0;font-size:14px;color:var(--ink-soft)}
+.credit a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:6px 4px}
+.credit a:focus-visible{outline:3px dashed var(--ink);outline-offset:2px}
 .teaser{
   position:relative;width:min(100%,400px);aspect-ratio:5/3;overflow:hidden;
   border:4px solid var(--ink);border-radius:22px;box-shadow:0 6px 0 var(--ink);background:var(--sheet);
@@ -123,8 +125,8 @@ h1 small{display:block;font-size:.56em;margin-top:2px}
 .medalLayer{position:absolute;inset:0;z-index:6;pointer-events:none}
 .dim{position:absolute;inset:0;background:rgba(30,20,40,.38);animation:fade .8s ease both}
 @keyframes fade{from{opacity:0}}
-/* 勳章放在樹幹和老鼠之間的天空，不蓋住左邊的面具和右邊的老鼠 */
-.medal{position:absolute;left:48%;top:5%;width:13%;translate:-50% 0;animation:drop 1.1s cubic-bezier(.3,.9,.4,1) .5s both}
+/* 勳章放在圖的左上角（左邊留 2%、上面留 3%） */
+.medal{position:absolute;left:8.5%;top:3%;width:13%;translate:-50% 0;animation:drop 1.1s cubic-bezier(.3,.9,.4,1) .5s both}
 .medal svg{display:block;width:100%;height:auto;transform-origin:50% 0;animation:sway 2.6s ease-in-out 1.6s infinite;filter:drop-shadow(0 0 10px rgba(255,236,160,.9))}
 @keyframes drop{0%{translate:-50% -180%} 65%{translate:-50% 8%} 82%{translate:-50% -4%} 100%{translate:-50% 0}}
 @keyframes sway{50%{transform:rotate(5deg)}}
@@ -161,6 +163,22 @@ h1 small{display:block;font-size:.56em;margin-top:2px}
 .medalCard h2 .who{color:var(--red)}
 .medalCard p{margin:0;color:var(--ink-soft)}
 .btnRow{display:flex;flex-wrap:wrap;gap:4px 14px;justify-content:center}
+/* 勳章卡下方：其他章節，完成的是黃底打勾，還沒完成的是虛線框 */
+.moreCh{width:100%;margin-top:10px;padding-top:12px;border-top:3px dashed var(--grid);display:flex;flex-direction:column;gap:8px}
+.moreCh h3{margin:0;font-size:20px}
+.chList{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.chLink{
+  display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 6px 10px;
+  background:var(--card);color:var(--ink);text-decoration:none;
+  border:3px dashed var(--ink);border-radius:18px;
+}
+.chLink img{width:auto;height:56px;max-width:100%}
+.chLink b{font-size:18px;line-height:1.2}
+.chLink small{font-size:14px;color:var(--ink-soft)}
+.chLink.done{background:color-mix(in srgb,var(--cheese) 35%,var(--card));border-style:solid;box-shadow:0 4px 0 var(--ink)}
+.chLink.done small{color:var(--leaf);font-weight:700}
+.chLink:active{transform:translateY(2px)}
+.chLink:focus-visible{outline:3px dashed var(--ink);outline-offset:3px}
 .go.save{background:var(--cheese);color:var(--ink)}
 .go:disabled{opacity:.6;cursor:progress}
 
@@ -170,6 +188,7 @@ h1 small{display:block;font-size:.56em;margin-top:2px}
 .tbtn[aria-pressed="false"]{background:var(--grid)}
 .tbtn:focus-visible{outline:3px dashed var(--ink);outline-offset:2px}
 .tbtn:disabled{opacity:.5;cursor:default}
+.menuLink{text-decoration:none;display:inline-flex;align-items:center}
 
 .rules{
   width:min(100%,640px);margin-inline:auto;
@@ -179,6 +198,7 @@ h1 small{display:block;font-size:.56em;margin-top:2px}
 .rules h2{margin:0;font-size:20px}
 .rules ul{margin:0;padding-left:1.2em;display:flex;flex-direction:column;gap:2px}
 .keys{margin:0;color:var(--ink-soft);font-size:14px}
+.playCredit{text-align:center}
 @media (max-width:440px){
   .status{gap:6px}
   .pill{height:42px;padding:0 10px 0 6px}

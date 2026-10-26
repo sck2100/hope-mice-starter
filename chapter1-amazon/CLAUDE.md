@@ -16,7 +16,7 @@ chapter1-amazon/
 ├── index.html      # 開始畫面、遊戲區（含過關／失敗／暫停卡片、勳章層）、勳章卡
 ├── style.css
 ├── i18n.js         # 中文／英文介面文字（改字只改這裡）
-├── levels.js       # 四關設定（調難度只改這裡）
+├── levels.js       # 章節編號 CHAPTER、總章數 CHAPTER_COUNT、四關設定（調難度只改這裡）
 ├── game.js         # 遊戲迴圈、移動、碰撞、繪圖、音效、語言切換、下載紀念圖
 ├── tools/
 │   └── make-export-data.py  # 產生 assets/export-data.js
@@ -25,6 +25,7 @@ chapter1-amazon/
     ├── reveal.png       # 成果圖第一格靜態版（開始畫面預告圖、首頁縮圖、下載圖的底圖）
     ├── mouse.png        # 主角老鼠（從 ../_archive/assets/sprites 複製過來）
     ├── mouse-dizzy.png  # 撞到時的暈倒圖
+    ├── friends/ch1～ch5.png  # 各章的 mouse.png 複本（由 ../tools/sync-chapters.py 產生）
     └── export-data.js   # 下載用的 base64 圖（自動產生，不要手改）
 ```
 
@@ -32,6 +33,7 @@ chapter1-amazon/
 - 控制：在圖上滑動手指、畫面上的方向鍵、鍵盤方向鍵或 WASD；空白鍵或「暫停」按鈕暫停；切到別的分頁會自動暫停
 - 每關一開始小老鼠不動，畫面顯示「第 N 關」和「選個方向出發！」，等玩家選方向才出發
 - 吃一顆瓜子，後面多跟一隻小老鼠寶寶
+- 好朋友小老鼠：破過別章的話（localStorage `boommouse-amazon-chN-cleared`，看到勳章時記錄），每關吃到第 1 顆瓜子時，那些章的小老鼠照章節順序一起來排隊（每走一步從隊尾出來一隻，不算瓜子數）；之後每吃一顆多一隻，從本章和破過的章隨機挑；沒破過別章就全是本章的小老鼠
 - 走出邊緣會從另一邊回來（不會撞牆）
 - 撞到自己的隊伍 = 失敗，顯示暈倒圖和「哎呀！」，從**當關**重新開始（不回第 1 關）
 - 吃滿該關瓜子數 = 過關；過關卡片出現的同時，背景換成下一關的模糊度（小朋友會看到圖變清楚）
@@ -77,16 +79,17 @@ const LEVELS = [
 3. 2.9 秒：淡入半透明暗色遮罩，勳章從上方落下（4.0 秒時播放勝利音效）
 4. 勳章落下後，一隻戴名牌（玩家名字）的小老鼠從左邊走進來，站在大老鼠後面的小路上（640×384 圖上約 (290,300)）
 5. 4.4 秒：棋盤下方的方向鍵換成勳章卡：「小老鼠 XXX 獲得亞馬遜勳章！」＋「下載這張圖」＋「再玩一次」
+   ＋「去玩其他章節」：其他章的連結（圖是 `assets/friends/chN.png`），已完成的黃底「已完成 ✓」，沒完成的虛線框「還沒完成」（`renderChapters()`）
 
 位置原則：
-- 勳章放在樹幹和老鼠之間的天空（left 48%、top 5%、寬 13%），不放正中間，因為正中間會蓋到老鼠抱的瓜子
+- 勳章放在圖的左上角（CSS：left 8.5% 是中心點、top 3%、寬 13%；Canvas：左邊 2%、上面 3%），畫面和下載圖要一致
 - 勳章和小老鼠都不能蓋住老鼠（右側）和面具（左側）的主體；成果圖下方的版權字與簽名保留不遮
 - 勳章文字放在棋盤下方的卡片，不寫在圖上
 
 ## 下載紀念圖
-- 「下載這張圖」產生 1280×768 PNG：成果圖第一格＋勳章＋戴名牌的小老鼠，檔名 `BooMMouse-Amazon-名字.png`
+- 「下載這張圖」產生 1280×768 PNG：成果圖第一格＋勳章＋戴名牌的小老鼠，檔名 `BooMMouse-Amazon-ChN-名字.png`
 - 雙擊開啟（file://）時，Canvas 畫了本機圖檔會被瀏覽器禁止匯出，所以下載用 `assets/export-data.js` 裡的 base64 圖，第一次按下載時才載入
-- 換了 reveal.png 或 mouse.png 之後，要重跑 `python tools/make-export-data.py`
+- 換了 reveal.png 或 mouse.png 之後，在根目錄跑 `python tools/sync-chapters.py`（會一起更新各章的 friends 圖）
 - 勳章在 Canvas 上用和 index.html 裡 SVG 相同的路徑重畫（`drawMedal()`），兩邊改其中一個時要一起改
 
 ## 音效（Web Audio 即時合成）
@@ -100,7 +103,7 @@ const LEVELS = [
 ## 畫面文字
 - 中文／英文兩版，所有文字（包含 Canvas 上的「第 N 關」「選個方向出發！」「哎呀！」「吱」）都在 `i18n.js`
 - HTML 用 `data-i18n`（文字）、`data-i18n-ph`（placeholder）、`data-i18n-aria`（aria-label）標記；會帶數字或名字的字由 `game.js` 的 `renderFail()`、`renderClear()`、`renderMedal()` 產生，切換語言時會重畫
-- 切換按鈕：開始畫面右上角、遊戲區下方各一個；開始畫面左上角是「← 所有章節」
+- 切換按鈕：開始畫面右上角、遊戲區下方各一個；「← 所有章節」（連回 ../index.html）在開始畫面左上角和遊戲區下方按鈕列各一個
 - `<title>` 和開始畫面大標跟著語言換：英文版大標 BooMMouse Goes Wild，小字是中文；中文版大標爆鼠闖天下，小字是英文
 - 英文版內文字型改用 Baloo 2
 

@@ -8,9 +8,12 @@
 hope-mice-starter/
 ├── CLAUDE.md          # 本檔：整個系列共通的規則
 ├── index.html         # 章節選單，只放各章的連結
+├── tools/sync-chapters.py  # 換了任何一章的 mouse.png／reveal.png 後跑一次（見下方）
 ├── chapter1-amazon/   # 第一章：亞馬遜吃瓜子（細節見 chapter1-amazon/CLAUDE.md）
-├── chapter2-amazon/   # 第二章（之後新增）
-├── chapter3-amazon/   # 第三章（之後新增）
+├── chapter2-amazon/   # 第二章～第五章：從第一章複製，玩法相同，只換圖
+├── chapter3-amazon/
+├── chapter4-amazon/
+├── chapter5-amazon/
 └── _archive/          # 舊的雛型，不再連結
     ├── games/seed-parade/   # 老鼠吃瓜子雛型（第一章的參考來源）
     └── assets/
@@ -22,8 +25,12 @@ hope-mice-starter/
 - 每章資料夾命名 `chapterN-主題`，自己有一份 CLAUDE.md 寫該章的玩法與設定。
 - 每章要能獨立運作：用到的圖都複製到該章的 `assets/`，不要用 `../` 去讀別章或 `_archive` 的檔案（回首頁的連結 `../index.html` 除外）。
 - 新增一章時：在根目錄 `index.html` 把該章的「即將推出」卡片改成 `<a class="ch" href="chapterN-xxx/index.html">`，並在 `TEXT` 裡補上中英文章名。
-- 每章開始畫面左上角放「← 所有章節」連回 `../index.html`。
+- 每章開始畫面左上角、遊戲區下方按鈕列都放「← 所有章節」連回 `../index.html`。
+- 破關的勳章卡下方列出其他章節（連到 `../chapterN-amazon/index.html`，標出已完成／還沒完成）；資料夾名稱一定要是 `chapterN-amazon` 這個格式，改名的話要改 `game.js` 的 `renderChapters()`。
 - 開新章節建議從 chapter1-amazon 複製一份再改：`index.html`、`style.css`、`i18n.js`（文字）、`levels.js`（關卡）、`game.js`、`assets/`，並把 CLAUDE.md 改寫成該章的內容。
+- 好朋友小老鼠：破過的章節，牠的 `mouse.png` 會在別章每關吃到第 1 顆瓜子時一起來排隊（各章 `assets/friends/chN.png` 是複製來的）。
+  換了任何一章的 `mouse.png` 或 `reveal.png` 後，在根目錄跑 `python tools/sync-chapters.py`，會更新每章的 friends 圖和下載用 base64 圖。
+  新增第 6 章時：`levels.js` 的 `CHAPTER` 改成 6，所有章的 `CHAPTER_COUNT` 改成 6，再跑一次 sync。
 - 每章都支援 `?test` 測試模式（例如每關只要吃 1 顆就過關），方便快速看到結局。
 
 ## 共通

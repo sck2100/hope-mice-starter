@@ -29,7 +29,7 @@
       <input id="nameInput" type="text" maxlength="12" placeholder="寫上名字" data-i18n-ph="namePh" autocomplete="off" enterkeyhint="go">
     </label>
     <button class="go" id="startBtn" type="button" data-i18n="start">出發！</button>
-    <p class="credit" data-i18n="credit">角色和圖都是 HOPE（BooMMouse）畫的</p>
+    <p class="credit"><a href="https://boommouse.com/" target="_blank" rel="noopener" data-i18n="credit">角色和圖都是 HOPE（BooMMouse）畫的</a></p>
   </section>
 
   <!-- 遊戲區 -->
@@ -99,12 +99,18 @@
         <button class="go save" id="saveBtn" type="button" data-i18n="save">下載這張圖</button>
         <button class="go" id="againBtn" type="button" data-i18n="again">再玩一次</button>
       </div>
+      <!-- 其他章節：有沒有完成由 game.js 的 renderChapters() 填入 -->
+      <div class="moreCh">
+        <h3 data-i18n="otherChapters">去玩其他章節</h3>
+        <div class="chList" id="chList"></div>
+      </div>
     </div>
 
     <div class="controls">
       <button class="tbtn" id="pauseBtn" type="button">暫停</button>
       <button class="tbtn" id="soundBtn" type="button" aria-pressed="true">聲音：開</button>
       <button class="tbtn" id="homeBtn" type="button" data-i18n="home">回開始畫面</button>
+      <a class="tbtn menuLink" href="../index.html" data-i18n="allChapters">← 所有章節</a>
       <button class="tbtn langBtn" type="button" data-i18n="langBtn">English</button>
     </div>
 
@@ -119,6 +125,7 @@
       </ul>
       <p class="keys" data-i18n="keys">用電腦玩：方向鍵或 WASD 控制，空白鍵暫停。</p>
     </section>
+    <p class="credit playCredit"><a href="https://boommouse.com/" target="_blank" rel="noopener" data-i18n="credit">角色和圖都是 HOPE（BooMMouse）畫的</a></p>
   </section>
 
 </div>

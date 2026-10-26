@@ -38,6 +38,8 @@
   }
   .alt{margin:0;font-family:var(--f-num);font-weight:600;font-size:15px;color:var(--ink-soft)}
   .credit{margin:0;font-size:14px;color:var(--ink-soft);text-align:center}
+  .credit a{color:inherit;text-decoration:underline;text-underline-offset:3px;display:inline-block;padding:6px 4px}
+  .credit a:focus-visible{outline:3px dashed var(--ink);outline-offset:2px}
   .langBtn{
     position:absolute;top:16px;right:max(16px, env(safe-area-inset-right,0px));
     font:inherit;font-weight:700;font-size:16px;padding:4px 16px;border:3px solid var(--ink);border-radius:999px;
@@ -79,19 +81,27 @@
   <section class="chapters">
     <a class="ch" href="chapter1-amazon/index.html">
       <div class="thumb"><img src="chapter1-amazon/assets/reveal.png" alt=""><span class="badge">1</span></div>
-      <div class="info"><b data-i18n="ch1">第一章　亞馬遜吃瓜子</b><small data-i18n="ch1Sub">帶小老鼠吃瓜子，四關過完拿勳章</small></div>
+      <div class="info"><b data-i18n="ch1">第一章　亞馬遜吃瓜子</b><small data-i18n="chSub">帶小老鼠吃瓜子，四關過完拿勳章</small></div>
     </a>
-    <div class="ch soon" aria-disabled="true">
-      <div class="thumb"><span class="badge">2</span></div>
-      <div class="info"><b data-i18n="ch2">第二章　亞馬遜</b><small data-i18n="soon">即將推出</small></div>
-    </div>
-    <div class="ch soon" aria-disabled="true">
-      <div class="thumb"><span class="badge">3</span></div>
-      <div class="info"><b data-i18n="ch3">第三章　亞馬遜</b><small data-i18n="soon">即將推出</small></div>
-    </div>
+    <a class="ch" href="chapter2-amazon/index.html">
+      <div class="thumb"><img src="chapter2-amazon/assets/reveal.png" alt=""><span class="badge">2</span></div>
+      <div class="info"><b data-i18n="ch2">第二章　亞馬遜吃瓜子</b><small data-i18n="chSub">帶小老鼠吃瓜子，四關過完拿勳章</small></div>
+    </a>
+    <a class="ch" href="chapter3-amazon/index.html">
+      <div class="thumb"><img src="chapter3-amazon/assets/reveal.png" alt=""><span class="badge">3</span></div>
+      <div class="info"><b data-i18n="ch3">第三章　亞馬遜吃瓜子</b><small data-i18n="chSub">帶小老鼠吃瓜子，四關過完拿勳章</small></div>
+    </a>
+    <a class="ch" href="chapter4-amazon/index.html">
+      <div class="thumb"><img src="chapter4-amazon/assets/reveal.png" alt=""><span class="badge">4</span></div>
+      <div class="info"><b data-i18n="ch4">第四章　亞馬遜吃瓜子</b><small data-i18n="chSub">帶小老鼠吃瓜子，四關過完拿勳章</small></div>
+    </a>
+    <a class="ch" href="chapter5-amazon/index.html">
+      <div class="thumb"><img src="chapter5-amazon/assets/reveal.png" alt=""><span class="badge">5</span></div>
+      <div class="info"><b data-i18n="ch5">第五章　亞馬遜吃瓜子</b><small data-i18n="chSub">帶小老鼠吃瓜子，四關過完拿勳章</small></div>
+    </a>
   </section>
 
-  <p class="credit" data-i18n="credit">角色和圖都是 HOPE（BooMMouse）畫的</p>
+  <p class="credit"><a href="https://boommouse.com/" target="_blank" rel="noopener" data-i18n="credit">角色和圖都是 HOPE（BooMMouse）畫的</a></p>
 </main>
 <script>
 (function(){
@@ -99,13 +109,15 @@
   const TEXT = {
     zh: { htmlLang:'zh-Hant', docTitle:'爆鼠闖天下', langBtn:'English',
       title:'爆鼠闖天下', alt:'BooMMouse Goes Wild',
-      ch1:'第一章　亞馬遜吃瓜子', ch1Sub:'帶小老鼠吃瓜子，四關過完拿勳章',
-      ch2:'第二章　亞馬遜', ch3:'第三章　亞馬遜', soon:'即將推出',
+      ch1:'第一章　亞馬遜吃瓜子', ch2:'第二章　亞馬遜吃瓜子', ch3:'第三章　亞馬遜吃瓜子',
+      ch4:'第四章　亞馬遜吃瓜子', ch5:'第五章　亞馬遜吃瓜子',
+      chSub:'帶小老鼠吃瓜子，四關過完拿勳章', soon:'即將推出',
       credit:'角色和圖都是 HOPE（BooMMouse）畫的' },
     en: { htmlLang:'en', docTitle:'BooMMouse Goes Wild', langBtn:'中文',
       title:'BooMMouse Goes Wild', alt:'爆鼠闖天下',
-      ch1:'Chapter 1 · Amazon Seed Hunt', ch1Sub:'Help the little mouse find seeds and win a medal',
-      ch2:'Chapter 2 · Amazon', ch3:'Chapter 3 · Amazon', soon:'Coming soon',
+      ch1:'Chapter 1 · Amazon Seed Hunt', ch2:'Chapter 2 · Amazon Seed Hunt', ch3:'Chapter 3 · Amazon Seed Hunt',
+      ch4:'Chapter 4 · Amazon Seed Hunt', ch5:'Chapter 5 · Amazon Seed Hunt',
+      chSub:'Help the little mouse find seeds and win a medal', soon:'Coming soon',
       credit:'Characters and pictures drawn by HOPE (BooMMouse)' }
   };
   const store = {

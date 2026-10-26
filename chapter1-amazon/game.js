@@ -17,6 +17,22 @@ const T = () => TEXT[lang];
 const load = src => { const im = new Image(); im.src = src; return im; };
 const img = { mouse: load('assets/mouse.png'), dizzy: load('assets/mouse-dizzy.png') };
 
+// ---- 好朋友小老鼠：破過的別章，牠的小老鼠會來排隊 ----
+// 過關紀錄存在 localStorage boommouse-amazon-chN-cleared
+const clearedKey = n => 'boommouse-amazon-ch' + n + '-cleared';
+let friends = [];
+function loadFriends(){
+  friends = [];
+  for(let n = 1; n <= CHAPTER_COUNT; n++)
+    if(n !== CHAPTER && store.get(clearedKey(n))) friends.push(load('assets/friends/ch' + n + '.png'));
+}
+// 每關吃到第 1 顆瓜子時，好朋友照章節順序一起來排隊（之後每走一步出來一隻）；
+// 之後每吃一顆多一隻，從本章和好朋友裡隨機挑
+function randomBaby(){
+  const pool = [img.mouse, ...friends];
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
 const board = $('board'), cv = $('game'), g = cv.getContext('2d'), bg = $('bg');
 let W = 640, H = 384, cs = 32, ox = 0, oy = 0;
 
@@ -49,7 +65,7 @@ const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
 
 function freshState(){
   return {
-    body:[{x:3,y:6}], prev:null, dir:{x:1,y:0}, face:1, queue:[],
+    body:[{x:3,y:6}], kinds:[null], joining:[], prev:null, dir:{x:1,y:0}, face:1, queue:[],
     seed:null, eaten:0,
     running:false, waiting:true, paused:false, over:false, done:false,
     last:0, overAt:0, pops:[], squeakAt:0, nextSqueak:0, chirps:{}
@@ -112,14 +128,20 @@ function step(){
   const h = S.body[0];
   // 走出邊緣會從另一邊回來
   const nh = { x:(h.x+S.dir.x+COLS)%COLS, y:(h.y+S.dir.y+ROWS)%ROWS };
-  const grow = eq(nh, S.seed);
+  const grow = eq(nh, S.seed), join = !grow && S.joining.length > 0;
   // 沒長大時尾巴會讓開，所以尾巴那格可以走
-  const n = grow ? S.body.length : S.body.length - 1;
+  const n = grow || join ? S.body.length : S.body.length - 1;
   for(let i=0;i<n;i++) if(eq(S.body[i], nh)) return fail();
 
   S.prev = S.body.map(c => ({x:c.x,y:c.y}));
   S.body.unshift(nh);
+  // 還有好朋友在等：尾巴不讓開，多出來那格就是下一隻好朋友
+  if(join){ S.kinds.push(S.joining.shift()); bump('pParade'); updatePills(); return; }
   if(!grow){ S.body.pop(); return; }
+  // 新寶寶排在隊伍最後面；kinds[i] 是隊伍第 i 隻用的圖
+  // 好朋友還沒出來完又吃到瓜子時，新寶寶排在好朋友後面
+  S.joining.push(...(S.eaten === 0 && friends.length ? friends : [randomBaby()]));
+  S.kinds.push(S.joining.shift());
   S.eaten++; sfx.munch(); addPop('+1', nh);
   bump('pSeeds'); bump('pParade'); updatePills();
   if(S.eaten >= need(level)){ S.seed = null; clearLevel(); }
@@ -166,6 +188,23 @@ function renderMedal(){
   } else h.textContent = t.medalNoName;
   $('buddyTag').textContent = playerName || t.buddyNoName;
   $('saveBtn').textContent = t.save;
+  renderChapters();
+}
+// 勳章卡下方：連到其他章節，標出哪幾章還沒完成
+function renderChapters(){
+  const t = T(), list = $('chList');
+  list.replaceChildren();
+  for(let n = 1; n <= CHAPTER_COUNT; n++){
+    if(n === CHAPTER) continue;
+    const done = !!store.get(clearedKey(n));
+    const a = document.createElement('a');
+    a.className = 'chLink' + (done ? ' done' : '');
+    a.href = '../chapter' + n + '-amazon/index.html';
+    const im = document.createElement('img'); im.src = 'assets/friends/ch' + n + '.png'; im.alt = '';
+    const b = document.createElement('b'); b.textContent = t.chName(n);
+    const s = document.createElement('small'); s.textContent = done ? t.chDone : t.chNotDone;
+    a.append(im, b, s); list.append(a);
+  }
 }
 
 // ---- 下載破關圖：成果圖＋勳章＋戴名牌的小老鼠 ----
@@ -206,7 +245,7 @@ async function makePicture(){
   const cnv = document.createElement('canvas'); cnv.width = w; cnv.height = h;
   const c = cnv.getContext('2d');
   c.drawImage(pic, 0, 0, w, h);
-  drawMedal(c, w*0.48 - w*0.065, h*0.05, w*0.13);
+  drawMedal(c, w*0.02, h*0.03, w*0.13); // 左上角，位置和畫面上的 .medal 一樣
   // 小老鼠站在大老鼠後面的小路上，位置和畫面上的 .buddy 一樣
   const mh = h*0.15, mw = mh * mouse.naturalWidth / mouse.naturalHeight, mx = w*0.453, my = h*0.781;
   c.save(); c.globalAlpha = 0.55; c.fillStyle = '#FFFFFF';
@@ -231,7 +270,7 @@ async function savePicture(){
     const blob = await new Promise((res, rej) => cnv.toBlob(bl => bl ? res(bl) : rej(new Error('toBlob')), 'image/png'));
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'BooMMouse-Amazon' + (playerName ? '-' + playerName.replace(/[\\/:*?"<>|]/g, '') : '') + '.png';
+    a.download = 'BooMMouse-Amazon-Ch' + CHAPTER +(playerName ? '-' + playerName.replace(/[\\/:*?"<>|]/g, '') : '') + '.png';
     document.body.append(a); a.click(); a.remove();
     setTimeout(() => URL.revokeObjectURL(a.href), 5000);
     b.textContent = T().save;
@@ -244,6 +283,7 @@ async function savePicture(){
 
 // 第 4 關吃完：blur 1 秒變清楚 → 停 1.5 秒 → 遮罩＋勳章落下 → 勳章卡
 function reveal(){
+  store.set(clearedKey(CHAPTER), '1');
   sfx.ding();
   later(() => { board.classList.add('reveal'); bgMode = 'clear'; applyBg(); }, 400);
   later(() => { $('medalLayer').hidden = false; }, 400 + 1000 + 1500);
@@ -284,6 +324,7 @@ function startGame(){
   playerName = $('nameInput').value.trim();
   store.set('boommouse-name', playerName);
   $('startScreen').hidden = true; $('playScreen').hidden = false;
+  loadFriends(); // 每次開始都重新看一次：可能剛在別的分頁破了另一章
   fit();
   enterLevel(0);
   window.scrollTo({ top:0 });
@@ -361,7 +402,7 @@ function draw(now){
     const c = C(p), bob = Math.sin(now/110 + i*0.9) * cs*0.06;
     g.save(); g.globalAlpha = 0.6; g.fillStyle = '#FFFFFF';
     g.beginPath(); g.ellipse(c.x, c.y + cs*0.34, cs*0.4, cs*0.14, 0, 0, Math.PI*2); g.fill(); g.restore();
-    sprite(img.mouse, c.x, c.y + cs*0.02 + bob, cs*0.9, dx < 0);
+    sprite(S.kinds[i] || img.mouse, c.x, c.y + cs*0.02 + bob, cs*0.9, dx < 0);
     if(now - (S.chirps[i] || -1e9) < 600) chirpLabels.push({ x:c.x + cs*0.3, y:c.y - cs*0.5, at:S.chirps[i], size:cs*0.5 });
   }
 
