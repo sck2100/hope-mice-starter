@@ -188,7 +188,9 @@ h1 small{display:block;font-size:.56em;margin-top:2px}
 .tbtn[aria-pressed="false"]{background:var(--grid)}
 .tbtn:focus-visible{outline:3px dashed var(--ink);outline-offset:2px}
 .tbtn:disabled{opacity:.5;cursor:default}
-.menuLink{text-decoration:none;display:inline-flex;align-items:center}
+/* 遊戲區最上面的「← 所有章節」，跟狀態列的膠囊一樣高 */
+.status .menuLink{text-decoration:none;padding:0 16px;font-size:17px;color:var(--ink)}
+.status .menuLink:active{transform:translateY(3px);box-shadow:0 1px 0 var(--ink)}
 
 .rules{
   width:min(100%,640px);margin-inline:auto;

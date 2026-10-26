@@ -6,7 +6,7 @@ BooMMouse Goes Wild – Amazon, Chapter 4
 
 ## 技術
 - 純 HTML + CSS + JavaScript，不用框架、不用 ES modules
-- 直接雙擊 index.html 就能玩；js 用一般 `<script>` 依序載入：`i18n.js` → `levels.js` → `game.js`
+- 直接雙擊 index.html 就能玩；js 用一般 `<script>` 依序載入：`i18n.js` → `levels.js` → `assets/versions.js` → `game.js`
 - 遊戲主體用 Canvas 畫小老鼠隊伍、瓜子和畫面上的字；背景成果圖不進 Canvas（見下方「背景圖」）
 
 ## 資料夾結構
@@ -26,7 +26,8 @@ chapter1-amazon/
     ├── mouse.png        # 主角老鼠（從 ../_archive/assets/sprites 複製過來）
     ├── mouse-dizzy.png  # 撞到時的暈倒圖
     ├── friends/ch1～ch5.png  # 各章的 mouse.png 複本（由 ../tools/sync-chapters.py 產生）
-    └── export-data.js   # 下載用的 base64 圖（自動產生，不要手改）
+    ├── export-data.js   # 下載用的 base64 圖（自動產生，不要手改）
+    └── versions.js      # 各檔案的防快取版本號（../tools/sync-chapters.py 產生，不要手改）
 ```
 
 ## 遊戲規則
@@ -35,7 +36,8 @@ chapter1-amazon/
 - 吃一顆瓜子，後面多跟一隻小老鼠寶寶
 - 好朋友小老鼠：破過別章的話（localStorage `boommouse-amazon-chN-cleared`，看到勳章時記錄），每關吃到第 1 顆瓜子時，那些章的小老鼠照章節順序一起來排隊（每走一步從隊尾出來一隻，不算瓜子數）；之後每吃一顆多一隻，從本章和破過的章隨機挑；沒破過別章就全是本章的小老鼠
 - 走出邊緣會從另一邊回來（不會撞牆）
-- 撞到自己的隊伍 = 失敗，顯示暈倒圖和「哎呀！」，從**當關**重新開始（不回第 1 關）
+- 碰到自己的隊伍可以直接穿過去，不會失敗（`levels.js` 的 `PASS_THROUGH = true`）
+- `PASS_THROUGH = false` 時：撞到自己的隊伍 = 失敗，顯示暈倒圖和「哎呀！」，從**當關**重新開始（不回第 1 關）
 - 吃滿該關瓜子數 = 過關；過關卡片出現的同時，背景換成下一關的模糊度（小朋友會看到圖變清楚）
 - 隊伍只有主角時可以直接迴轉；有寶寶之後不能直接迴轉
 
@@ -103,7 +105,7 @@ const LEVELS = [
 ## 畫面文字
 - 中文／英文兩版，所有文字（包含 Canvas 上的「第 N 關」「選個方向出發！」「哎呀！」「吱」）都在 `i18n.js`
 - HTML 用 `data-i18n`（文字）、`data-i18n-ph`（placeholder）、`data-i18n-aria`（aria-label）標記；會帶數字或名字的字由 `game.js` 的 `renderFail()`、`renderClear()`、`renderMedal()` 產生，切換語言時會重畫
-- 切換按鈕：開始畫面右上角、遊戲區下方各一個；「← 所有章節」（連回 ../index.html）在開始畫面左上角和遊戲區下方按鈕列各一個
+- 切換按鈕：開始畫面右上角、遊戲區下方各一個；「← 所有章節」（連回 ../index.html）在開始畫面左上角和遊戲區最上面的狀態列（第一個膠囊）各一個
 - `<title>` 和開始畫面大標跟著語言換：英文版大標 BooMMouse Goes Wild，小字是中文；中文版大標爆鼠闖天下，小字是英文
 - 英文版內文字型改用 Baloo 2
 

@@ -47,7 +47,7 @@ const TEXT = {
     rule1: '在圖上滑動手指，或按下面的方向鍵，帶小老鼠去吃瓜子。',
     rule2: '吃一顆瓜子，後面就多跟一隻小老鼠寶寶。',
     rule3: '從邊邊走出去，會從另一邊回來。',
-    rule4: '不能撞到自己的小老鼠隊伍。撞到了沒關係，從這一關重新開始。',
+    rule4: '碰到自己的小老鼠隊伍也沒關係，可以直接穿過去。',
     rule5: '吃滿這一關的瓜子就過關，後面的圖會變清楚一點。四關都過就能看到完整的圖，還有勳章！',
     keys: '用電腦玩：方向鍵或 WASD 控制，空白鍵暫停。',
     // 畫在 Canvas 上的字
@@ -102,7 +102,7 @@ const TEXT = {
     rule1: 'Swipe on the picture, or press the arrow buttons, to lead the little mouse to the seeds.',
     rule2: 'Every seed you eat adds a baby mouse to your line.',
     rule3: 'Walk off one edge and you come back on the other side.',
-    rule4: "Don't bump into your own line of mice. If you do, that's OK. Just try the level again.",
+    rule4: "It's OK to walk into your own line of mice. You can go right through!",
     rule5: 'Eat all the seeds in a level to clear it, and the picture gets clearer. Clear all four to see the whole picture and win a medal!',
     keys: 'On a computer: arrow keys or WASD to move, Space to pause.',
     cvLevel: n => 'Level ' + n,

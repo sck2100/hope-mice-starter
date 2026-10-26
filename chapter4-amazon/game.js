@@ -14,7 +14,10 @@ const store = {
 let lang = store.get('boommouse-lang') || 'en'; // 還沒選過語言時預設英文
 const T = () => TEXT[lang];
 
-const load = src => { const im = new Image(); im.src = src; return im; };
+// 防快取：assets/versions.js（../tools/sync-chapters.py 產生）記著每個檔案的版本，網址後面加 ?v=版本，
+// 換了圖之後瀏覽器才不會抓到舊的
+const asset = p => p + (window.ASSET_V && window.ASSET_V[p] ? '?v=' + window.ASSET_V[p] : '');
+const load = src => { const im = new Image(); im.src = asset(src); return im; };
 const img = { mouse: load('assets/mouse.png'), dizzy: load('assets/mouse-dizzy.png') };
 
 // ---- 好朋友小老鼠：破過的別章，牠的小老鼠會來排隊 ----
@@ -131,7 +134,7 @@ function step(){
   const grow = eq(nh, S.seed), join = !grow && S.joining.length > 0;
   // 沒長大時尾巴會讓開，所以尾巴那格可以走
   const n = grow || join ? S.body.length : S.body.length - 1;
-  for(let i=0;i<n;i++) if(eq(S.body[i], nh)) return fail();
+  if(!PASS_THROUGH) for(let i=0;i<n;i++) if(eq(S.body[i], nh)) return fail();
 
   S.prev = S.body.map(c => ({x:c.x,y:c.y}));
   S.body.unshift(nh);
@@ -200,7 +203,7 @@ function renderChapters(){
     const a = document.createElement('a');
     a.className = 'chLink' + (done ? ' done' : '');
     a.href = '../chapter' + n + '-amazon/index.html';
-    const im = document.createElement('img'); im.src = 'assets/friends/ch' + n + '.png'; im.alt = '';
+    const im = document.createElement('img'); im.src = asset('assets/friends/ch' + n + '.png'); im.alt = '';
     const b = document.createElement('b'); b.textContent = t.chName(n);
     const s = document.createElement('small'); s.textContent = done ? t.chDone : t.chNotDone;
     a.append(im, b, s); list.append(a);
@@ -214,7 +217,7 @@ function loadExportData(){
   if(window.EXPORT_IMG) return Promise.resolve(window.EXPORT_IMG);
   return new Promise((res, rej) => {
     const sc = document.createElement('script');
-    sc.src = 'assets/export-data.js'; sc.onload = () => res(window.EXPORT_IMG); sc.onerror = rej;
+    sc.src = asset('assets/export-data.js'); sc.onload = () => res(window.EXPORT_IMG); sc.onerror = rej;
     document.head.append(sc);
   });
 }

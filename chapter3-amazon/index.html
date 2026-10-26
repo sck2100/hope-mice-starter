@@ -7,7 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;800&family=LXGW+WenKai+TC:wght@400;700&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=1952f9fe">
 </head>
 <body>
 <div class="app">
@@ -16,11 +16,11 @@
   <section class="screen start" id="startScreen">
     <a class="tbtn homeLink" href="../index.html" data-i18n="allChapters">← 所有章節</a>
     <button class="tbtn langBtn" type="button" data-i18n="langBtn">English</button>
-    <img class="hero" src="assets/mouse.png" alt="">
+    <img class="hero" src="assets/mouse.png?v=97af9699" alt="">
     <h1><span class="hl" data-i18n="title1">爆鼠闖天下</span><small data-i18n="title2">亞馬遜吃瓜子　第三章</small></h1>
     <p class="alt" data-i18n="titleAlt">BooMMouse Goes Wild – Amazon, Chapter 3</p>
     <div class="teaser" aria-hidden="true">
-      <img src="assets/reveal.png" alt="">
+      <img src="assets/reveal.png?v=168d3d4b" alt="">
       <b class="q">?</b>
     </div>
     <p class="sub" data-i18n="sub">帶小老鼠去亞馬遜森林吃瓜子。每過一關，這張圖就會變清楚一點，四關都過就能拿到勳章！</p>
@@ -35,13 +35,15 @@
   <!-- 遊戲區 -->
   <section class="screen play" id="playScreen" hidden>
     <div class="status" aria-live="polite">
+      <!-- 遊戲中也看得到：放在最上面，不用捲到下面找 -->
+      <a class="tbtn menuLink pill" href="../index.html" data-i18n="allChapters">← 所有章節</a>
       <div class="pill" id="pLevel"><small data-i18n="lvPre">第</small><b id="nLevel">1</b><small data-i18n="lvPost">關</small></div>
       <div class="pill" id="pSeeds"><canvas id="seedIcon" width="68" height="68" aria-hidden="true"></canvas><b id="nSeeds">0</b><small id="nNeed">/ 5</small></div>
-      <div class="pill" id="pParade"><img src="assets/mouse.png" alt=""><b id="nParade">0</b><small data-i18n="babies">隻小老鼠</small></div>
+      <div class="pill" id="pParade"><img src="assets/mouse.png?v=97af9699" alt=""><b id="nParade">0</b><small data-i18n="babies">隻小老鼠</small></div>
     </div>
 
     <div class="board" id="board">
-      <img id="bg" src="assets/reveal.gif" alt="">
+      <img id="bg" src="assets/reveal.gif?v=329f9ef0" alt="">
       <canvas id="game" width="640" height="384" aria-label="遊戲區" data-i18n-aria="boardAria"></canvas>
 
       <div class="overlay" id="pauseOv" hidden>
@@ -78,7 +80,7 @@
           </svg>
         </div>
         <!-- 破關後走進來的小老鼠，戴著名牌 -->
-        <div class="buddy"><span class="tag" id="buddyTag">小老鼠</span><img src="assets/mouse.png" alt=""></div>
+        <div class="buddy"><span class="tag" id="buddyTag">小老鼠</span><img src="assets/mouse.png?v=97af9699" alt=""></div>
       </div>
     </div>
 
@@ -110,7 +112,6 @@
       <button class="tbtn" id="pauseBtn" type="button">暫停</button>
       <button class="tbtn" id="soundBtn" type="button" aria-pressed="true">聲音：開</button>
       <button class="tbtn" id="homeBtn" type="button" data-i18n="home">回開始畫面</button>
-      <a class="tbtn menuLink" href="../index.html" data-i18n="allChapters">← 所有章節</a>
       <button class="tbtn langBtn" type="button" data-i18n="langBtn">English</button>
     </div>
 
@@ -120,7 +121,7 @@
         <li data-i18n="rule1">在圖上滑動手指，或按下面的方向鍵，帶小老鼠去吃瓜子。</li>
         <li data-i18n="rule2">吃一顆瓜子，後面就多跟一隻小老鼠寶寶。</li>
         <li data-i18n="rule3">從邊邊走出去，會從另一邊回來。</li>
-        <li data-i18n="rule4">不能撞到自己的小老鼠隊伍。撞到了沒關係，從這一關重新開始。</li>
+        <li data-i18n="rule4">碰到自己的小老鼠隊伍也沒關係，可以直接穿過去。</li>
         <li data-i18n="rule5">吃滿這一關的瓜子就過關，後面的圖會變清楚一點。四關都過就能看到完整的圖，還有勳章！</li>
       </ul>
       <p class="keys" data-i18n="keys">用電腦玩：方向鍵或 WASD 控制，空白鍵暫停。</p>
@@ -129,8 +130,9 @@
   </section>
 
 </div>
-<script src="i18n.js"></script>
-<script src="levels.js"></script>
-<script src="game.js"></script>
+<script src="i18n.js?v=75daccc4"></script>
+<script src="levels.js?v=5be32afc"></script>
+<script src="assets/versions.js?v=1f6f34a6"></script>
+<script src="game.js?v=e474fe50"></script>
 </body>
 </html>

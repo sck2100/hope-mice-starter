@@ -3,6 +3,9 @@ const CHAPTER = 5;
 // 總共有幾章：破過的章節，牠的小老鼠會來別章的隊伍裡（圖在 assets/friends/chN.png）
 const CHAPTER_COUNT = 5;
 
+// 碰到自己的隊伍可以直接穿過去（true，比較簡單）；改成 false 的話撞到就要重來
+const PASS_THROUGH = true;
+
 // 四關設定（調難度只改這裡）
 // blur：背景成果圖的模糊程度（以 640px 寬為準，畫面變大會等比放大），null = 素面底色
 // seeds：這關要吃幾顆瓜子才過關
